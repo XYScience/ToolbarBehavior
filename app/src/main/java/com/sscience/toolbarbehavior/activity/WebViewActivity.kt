@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import com.sscience.toolbarbehavior.BaseActivity
 import android.view.ViewGroup
+import com.google.android.material.appbar.AppBarLayout
 import com.sscience.toolbarbehavior.R
 import kotlinx.android.synthetic.main.activiti_web.*
 import kotlinx.android.synthetic.main.divider.*
@@ -18,7 +19,8 @@ import kotlin.math.abs
  */
 class WebViewActivity : BaseActivity() {
 
-    private var mDividerParams: ViewGroup.LayoutParams? = null
+    private var mDividerParams: AppBarLayout.LayoutParams? = null
+    private var mMargin: Int = 0
     private var mMarginLeftRight: Int = 0
     private var mListFirstChildInitY: Int = 0
     private var mDividerAlphaChangeEndY: Int = 0
@@ -38,13 +40,14 @@ class WebViewActivity : BaseActivity() {
 
         setContentView(R.layout.activiti_web)
 
+        mMargin = resources.getDimensionPixelOffset(R.dimen.divider_margin)
         mMarginLeftRight = 2 * resources.getDimensionPixelOffset(R.dimen.divider_margin)
         mDividerAlphaChangeOffset = resources.getDimensionPixelOffset(R.dimen.line_alpha_range_change_offset)
         mDividerWidthChangeOffset = resources.getDimensionPixelOffset(R.dimen.divider_width_change_offset)
-        mDividerParams = divider.layoutParams
+        mDividerParams = divider.layoutParams as AppBarLayout.LayoutParams?
         appbar.post {
             mDividerInitWidth = divider.measuredWidth
-            mListFirstChildInitY = appbar.measuredHeight
+            mListFirstChildInitY = appbar.measuredHeight  // 56dp
             mDividerAlphaChangeEndY = mListFirstChildInitY - mDividerAlphaChangeOffset
             mDividerWidthChangeInitY =
                 mListFirstChildInitY - resources.getDimensionPixelOffset(R.dimen.divider_width_start_count_offset)
@@ -78,9 +81,6 @@ class WebViewActivity : BaseActivity() {
             divider.alpha = mDividerAlphaRange
         }
 
-        Log.e(">>>>>>>>>", "mLocationY: $mLocationY")
-        Log.e(">>>>>>>>>", "mDividerWidthChangeEndY: $mDividerWidthChangeEndY")
-        Log.e(">>>>>>>>>", "mDividerWidthChangeInitY: $mDividerWidthChangeInitY")
         mNewOffset = when {
             mLocationY < mDividerWidthChangeEndY -> mDividerWidthChangeOffset
             mLocationY > mDividerWidthChangeInitY -> 0
@@ -88,10 +88,9 @@ class WebViewActivity : BaseActivity() {
                 mDividerWidthChangeInitY - mLocationY
         }
         mCurrentOffset = mNewOffset
-        mDividerWidthRange = abs(mCurrentOffset) / mDividerWidthChangeOffset.toFloat()
-        mDividerParams?.width = (mDividerInitWidth + mMarginLeftRight * mDividerWidthRange).toInt()
-        Log.e(">>>>>>>>>", "width: ${(mDividerInitWidth + mMarginLeftRight * mDividerWidthRange).toInt()}")
+        mDividerWidthRange = 1 - abs(mCurrentOffset) / mDividerWidthChangeOffset.toFloat()
+        mDividerParams?.marginStart = (mMargin * mDividerWidthRange).toInt()
+        mDividerParams?.marginEnd = (mMargin * mDividerWidthRange).toInt()
         divider.layoutParams = mDividerParams
-        Log.e(">>>>>>>>>", "after params: ${divider.layoutParams.width}")
     }
 }

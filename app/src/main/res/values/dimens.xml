@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="divider_margin">24dp</dimen>
-    <dimen name="line_alpha_range_change_offset">3dp</dimen>
+    <dimen name="line_alpha_range_change_offset">10dp</dimen>
     <dimen name="divider_width_change_offset">24dp</dimen>
-    <dimen name="divider_width_start_count_offset">12dp</dimen>
+    <dimen name="divider_width_start_count_offset">10dp</dimen>
 </resources>

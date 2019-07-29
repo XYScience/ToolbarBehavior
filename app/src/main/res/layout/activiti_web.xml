@@ -23,7 +23,7 @@
         <include
                 layout="@layout/divider"
                 android:layout_width="match_parent"
-                android:layout_height="12px"
+                android:layout_height="2px"
                 android:layout_marginStart="@dimen/divider_margin"
                 android:layout_marginEnd="@dimen/divider_margin"
         />
